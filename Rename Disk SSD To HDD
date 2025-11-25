@@ -1,0 +1,126 @@
+
+oc rsh rook-ceph-operator-7f8b6cc6bd-bhtk5
+export CEPH_ARGS='-c/var/lib/rook/openshift-storage/openshift-storage.config'
+
+
+ceph osd df
+sh-5.1$ ceph osd df
+ID  CLASS  WEIGHT   REWEIGHT  SIZE      RAW USE  DATA     OMAP     META     AVAIL     %USE   VAR   PGS  STATUS
+ 0    HDD  1.00000   1.00000  1024 GiB  751 GiB  748 GiB  117 MiB  2.3 GiB   273 GiB  73.33  1.19   96      up
+ 5    HDD  1.00000   1.00000  1024 GiB  786 GiB  783 GiB  103 MiB  2.5 GiB   238 GiB  76.73  1.24   93      up
+ 6    HDD  1.00000   1.00000  1024 GiB  853 GiB  851 GiB  129 MiB  2.4 GiB   171 GiB  83.34  1.35   95      up
+ 9    HDD  1.00000   1.00000  1024 GiB  770 GiB  768 GiB  187 MiB  2.4 GiB   254 GiB  75.23  1.22   93      up
+12    ssd  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    0      up
+ 1    HDD  1.00000   1.00000  1024 GiB  776 GiB  773 GiB  126 MiB  2.0 GiB   248 GiB  75.74  1.23   97      up
+ 4    HDD  1.00000   1.00000  1024 GiB  686 GiB  684 GiB  176 MiB  2.1 GiB   338 GiB  67.03  1.09   91      up
+ 7    HDD  1.00000   1.00000  1024 GiB  800 GiB  798 GiB  169 MiB  2.5 GiB   224 GiB  78.17  1.27  101      up
+10    HDD  1.00000   1.00000  1024 GiB  898 GiB  895 GiB   69 MiB  2.7 GiB   126 GiB  87.66  1.42   88      up
+14    ssd  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    0      up
+ 2    HDD  1.00000   1.00000  1024 GiB  812 GiB  809 GiB  167 MiB  2.4 GiB   212 GiB  79.26  1.28  103      up
+ 3    HDD  1.00000   1.00000  1024 GiB  778 GiB  775 GiB  152 MiB  2.2 GiB   246 GiB  75.95  1.23   91      up
+ 8    HDD  1.00000   1.00000  1024 GiB  703 GiB  701 GiB  112 MiB  2.3 GiB   321 GiB  68.68  1.11   86      up
+11    HDD  1.00000   1.00000  1024 GiB  867 GiB  865 GiB  106 MiB  2.3 GiB   157 GiB  84.71  1.37   97      up
+13    ssd  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    0      up
+                       TOTAL    15 TiB  9.3 TiB  9.2 TiB  1.6 GiB   28 GiB   5.7 TiB  61.72
+
+ ceph osd crush rm-device-class osd.12
+done removing class of osd(s): 12
+sh-5.1$ ceph osd crush set-device-class HDD osd.12
+set osd(s) 12 to class 'HDD'
+sh-5.1$
+sh-5.1$ ceph osd df
+ID  CLASS  WEIGHT   REWEIGHT  SIZE      RAW USE  DATA     OMAP     META     AVAIL     %USE   VAR   PGS  STATUS
+ 0    HDD  1.00000   1.00000  1024 GiB  751 GiB  749 GiB  117 MiB  2.3 GiB   273 GiB  73.34  1.19   95      up
+ 5    HDD  1.00000   1.00000  1024 GiB  786 GiB  783 GiB  103 MiB  2.5 GiB   238 GiB  76.74  1.24   94      up
+ 6    HDD  1.00000   1.00000  1024 GiB  853 GiB  851 GiB  129 MiB  2.3 GiB   171 GiB  83.33  1.35   95      up
+ 9    HDD  1.00000   1.00000  1024 GiB  770 GiB  768 GiB  187 MiB  2.4 GiB   254 GiB  75.23  1.22   92      up
+12    HDD  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    1      up
+ 1    HDD  1.00000   1.00000  1024 GiB  776 GiB  773 GiB  126 MiB  2.0 GiB   248 GiB  75.74  1.23   96      up
+ 4    HDD  1.00000   1.00000  1024 GiB  686 GiB  684 GiB  176 MiB  2.2 GiB   338 GiB  67.04  1.09   92      up
+ 7    HDD  1.00000   1.00000  1024 GiB  800 GiB  798 GiB  170 MiB  2.3 GiB   224 GiB  78.15  1.27  101      up
+10    HDD  1.00000   1.00000  1024 GiB  898 GiB  895 GiB   69 MiB  2.7 GiB   126 GiB  87.66  1.42   88      up
+14    ssd  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    0      up
+ 2    HDD  1.00000   1.00000  1024 GiB  812 GiB  809 GiB  167 MiB  2.4 GiB   212 GiB  79.26  1.28  103      up
+ 3    HDD  1.00000   1.00000  1024 GiB  778 GiB  775 GiB  152 MiB  2.2 GiB   246 GiB  75.95  1.23   91      up
+ 8    HDD  1.00000   1.00000  1024 GiB  703 GiB  701 GiB  112 MiB  2.3 GiB   321 GiB  68.68  1.11   87      up
+11    HDD  1.00000   1.00000  1024 GiB  867 GiB  865 GiB  106 MiB  2.4 GiB   157 GiB  84.71  1.37   96      up
+13    ssd  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    0      up
+                       TOTAL    15 TiB  9.3 TiB  9.2 TiB  1.6 GiB   28 GiB   5.7 TiB  61.72
+MIN/MAX VAR: 0/1.42  STDDEV: 31.30
+sh-5.1$ ceph osd df
+ID  CLASS  WEIGHT   REWEIGHT  SIZE      RAW USE  DATA     OMAP     META     AVAIL     %USE   VAR   PGS  STATUS
+ 0    HDD  1.00000   1.00000  1024 GiB  751 GiB  749 GiB  117 MiB  2.4 GiB   273 GiB  73.37  1.19   92      up
+ 5    HDD  1.00000   1.00000  1024 GiB  786 GiB  784 GiB  103 MiB  2.5 GiB   238 GiB  76.78  1.24   93      up
+ 6    HDD  1.00000   1.00000  1024 GiB  854 GiB  851 GiB  164 MiB  2.4 GiB   170 GiB  83.36  1.35   95      up
+ 9    HDD  1.00000   1.00000  1024 GiB  771 GiB  768 GiB  187 MiB  2.4 GiB   253 GiB  75.27  1.22   91      up
+12    HDD  1.00000   1.00000  1024 GiB  1.5 GiB  1.3 GiB    1 KiB  176 MiB  1023 GiB   0.14  0.00    6      up
+ 1    HDD  1.00000   1.00000  1024 GiB  776 GiB  774 GiB  126 MiB  2.0 GiB   248 GiB  75.75  1.23   96      up
+ 4    HDD  1.00000   1.00000  1024 GiB  687 GiB  684 GiB  176 MiB  2.1 GiB   337 GiB  67.05  1.09   92      up
+ 7    HDD  1.00000   1.00000  1024 GiB  801 GiB  798 GiB  170 MiB  2.3 GiB   223 GiB  78.19  1.27  101      up
+10    HDD  1.00000   1.00000  1024 GiB  898 GiB  895 GiB   69 MiB  2.7 GiB   126 GiB  87.66  1.42   88      up
+14    ssd  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    0      up
+ 2    HDD  1.00000   1.00000  1024 GiB  812 GiB  809 GiB  203 MiB  2.5 GiB   212 GiB  79.28  1.28  103      up
+ 3    HDD  1.00000   1.00000  1024 GiB  778 GiB  776 GiB  152 MiB  2.2 GiB   246 GiB  75.99  1.23   91      up
+ 8    HDD  1.00000   1.00000  1024 GiB  703 GiB  701 GiB  112 MiB  2.3 GiB   321 GiB  68.70  1.11   86      up
+11    HDD  1.00000   1.00000  1024 GiB  868 GiB  865 GiB  106 MiB  2.4 GiB   156 GiB  84.72  1.37   97      up
+13    ssd  1.00000   1.00000  1024 GiB   45 MiB   19 MiB    1 KiB   26 MiB  1024 GiB   0.00     0    0      up
+                       TOTAL    15 TiB  9.3 TiB  9.2 TiB  1.6 GiB   28 GiB   5.7 TiB  61.75
+MIN/MAX VAR: 0.00/1.42  STDDEV: 31.16
+sh-5.1$ ceph osd df
+ID  CLASS  WEIGHT   REWEIGHT  SIZE      RAW USE  DATA     OMAP     META     AVAIL    %USE   VAR   PGS  STATUS
+ 0    HDD  1.00000   1.00000  1024 GiB  756 GiB  753 GiB   93 MiB  2.3 GiB  268 GiB  73.79  1.18   89      up
+ 5    HDD  1.00000   1.00000  1024 GiB  790 GiB  788 GiB   91 MiB  2.2 GiB  234 GiB  77.16  1.23   89      up
+ 6    HDD  1.00000   1.00000  1024 GiB  854 GiB  851 GiB  164 MiB  2.5 GiB  170 GiB  83.40  1.33   92      up
+ 9    HDD  1.00000   1.00000  1024 GiB  771 GiB  768 GiB  187 MiB  2.5 GiB  253 GiB  75.26  1.20   90      up
+12    HDD  1.00000   1.00000  1024 GiB   42 GiB   41 GiB   71 MiB  874 MiB  982 GiB   4.07  0.06   17      up
+ 1    HDD  1.00000   1.00000  1024 GiB  776 GiB  774 GiB  126 MiB  2.0 GiB  248 GiB  75.78  1.21   95      up
+ 4    HDD  1.00000   1.00000  1024 GiB  689 GiB  687 GiB  176 MiB  2.2 GiB  335 GiB  67.33  1.08   87      up
+ 7    HDD  1.00000   1.00000  1024 GiB  802 GiB  799 GiB  170 MiB  2.5 GiB  222 GiB  78.30  1.25  101      up
+10    HDD  1.00000   1.00000  1024 GiB  898 GiB  895 GiB   57 MiB  2.8 GiB  126 GiB  87.67  1.40   84      up
+14    HDD  1.00000   1.00000  1024 GiB   35 GiB   35 GiB   33 MiB  589 MiB  989 GiB   3.44  0.06   10      up
+ 2    HDD  1.00000   1.00000  1024 GiB  812 GiB  809 GiB  179 MiB  2.4 GiB  212 GiB  79.28  1.27   98      up
+ 3    HDD  1.00000   1.00000  1024 GiB  778 GiB  776 GiB  152 MiB  2.4 GiB  246 GiB  76.02  1.21   89      up
+ 8    HDD  1.00000   1.00000  1024 GiB  703 GiB  701 GiB  113 MiB  2.2 GiB  321 GiB  68.68  1.10   83      up
+11    HDD  1.00000   1.00000  1024 GiB  868 GiB  865 GiB  106 MiB  2.4 GiB  156 GiB  84.72  1.35   91      up
+13    HDD  1.00000   1.00000  1024 GiB   37 GiB   37 GiB    1 KiB  541 MiB  987 GiB   3.65  0.06   16      up
+                       TOTAL    15 TiB  9.4 TiB  9.4 TiB  1.7 GiB   30 GiB  5.6 TiB  62.57
+MIN/MAX VAR: 0.06/1.40  STDDEV: 29.87
+sh-5.1$ ceph osd df
+ID  CLASS  WEIGHT   REWEIGHT  SIZE      RAW USE  DATA     OMAP     META     AVAIL    %USE   VAR   PGS  STATUS
+ 0    HDD  1.00000   1.00000  1024 GiB  758 GiB  756 GiB   93 MiB  2.4 GiB  266 GiB  74.03  1.17   89      up
+ 5    HDD  1.00000   1.00000  1024 GiB  793 GiB  791 GiB   91 MiB  2.2 GiB  231 GiB  77.48  1.23   89      up
+ 6    HDD  1.00000   1.00000  1024 GiB  854 GiB  851 GiB  164 MiB  2.5 GiB  170 GiB  83.41  1.32   91      up
+ 9    HDD  1.00000   1.00000  1024 GiB  771 GiB  768 GiB  187 MiB  2.5 GiB  253 GiB  75.26  1.19   90      up
+12    HDD  1.00000   1.00000  1024 GiB   66 GiB   65 GiB   71 MiB  1.0 GiB  958 GiB   6.41  0.10   18      up
+ 1    HDD  1.00000   1.00000  1024 GiB  776 GiB  774 GiB  126 MiB  2.1 GiB  248 GiB  75.79  1.20   95      up
+ 4    HDD  1.00000   1.00000  1024 GiB  691 GiB  689 GiB  176 MiB  2.3 GiB  333 GiB  67.49  1.07   86      up
+ 7    HDD  1.00000   1.00000  1024 GiB  802 GiB  799 GiB  170 MiB  2.5 GiB  222 GiB  78.31  1.24  100      up
+10    HDD  1.00000   1.00000  1024 GiB  898 GiB  895 GiB   30 MiB  2.7 GiB  126 GiB  87.65  1.39   84      up
+14    HDD  1.00000   1.00000  1024 GiB   59 GiB   58 GiB   33 MiB  808 MiB  965 GiB   5.74  0.09   12      up
+ 2    HDD  1.00000   1.00000  1024 GiB  812 GiB  809 GiB  179 MiB  2.4 GiB  212 GiB  79.28  1.26   98      up
+ 3    HDD  1.00000   1.00000  1024 GiB  778 GiB  776 GiB  152 MiB  2.4 GiB  246 GiB  76.02  1.21   89      up
+ 8    HDD  1.00000   1.00000  1024 GiB  703 GiB  701 GiB  113 MiB  2.2 GiB  321 GiB  68.68  1.09   83      up
+11    HDD  1.00000   1.00000  1024 GiB  868 GiB  865 GiB  106 MiB  2.4 GiB  156 GiB  84.73  1.34   91      up
+13    HDD  1.00000   1.00000  1024 GiB   61 GiB   60 GiB    1 KiB  712 MiB  963 GiB   5.96  0.09   16      up
+                       TOTAL    15 TiB  9.5 TiB  9.4 TiB  1.7 GiB   31 GiB  5.5 TiB  63.08
+MIN/MAX VAR: 0.09/1.39  STDDEV: 28.98
+
+
+
+
+sh-5.1$ ceph osd reweight-by-utilization
+moved 18 / 1131 (1.59151%)
+avg 75.4
+stddev 4.70177 -> 5.2128 (expected baseline 8.38888)
+min osd.8 with 66 -> 70 pgs (0.875332 -> 0.928382 * mean)
+max osd.7 with 84 -> 84 pgs (1.11406 -> 1.11406 * mean)
+
+oload 120
+max_change 0.05
+max_change_osds 4
+average_utilization 0.6337
+overload_utilization 0.7604
+osd.10 weight 1.0000 -> 0.9500
+osd.11 weight 1.0000 -> 0.9500
+osd.6 weight 1.0000 -> 0.9500
+osd.2 weight 1.0000 -> 0.9500
