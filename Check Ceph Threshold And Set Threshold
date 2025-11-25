@@ -1,0 +1,20 @@
+To check threshold ratio of odf
+
+sh-5.1$ ceph osd dump | grep ratio
+full_ratio 0.95
+backfillfull_ratio 0.9
+nearfull_ratio 0.8
+
+____________________________________________________________________
+____________________________________________________________________
+
+To set threshold ratio of odf
+
+ceph osd set-full-ratio 0.85
+
+ceph osd set-nearfull-ratio 0.75
+
+ceph osd set-backfillfull-ratio 0.80
+
+___________________________________________________________________
+___________________________________________________________________
